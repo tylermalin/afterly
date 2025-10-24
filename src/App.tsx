@@ -18,6 +18,10 @@ import LegacyScoreQuiz from "./components/LegacyScoreQuiz";
 import SignupModal from "./components/SignupModal";
 import ErrorBoundary from "./components/ErrorBoundary";
 
+// Import static assets
+import afterlyLogo from "/afterly-logo.png";
+import digitalVisual from "/digital-legacy-visual.jpg";
+
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
   show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
@@ -126,7 +130,7 @@ export default function App() {
           {/* Logo */}
           <motion.div variants={scaleIn} className="mb-8">
             <motion.img 
-              src="/afterly-logo.png" 
+              src={afterlyLogo} 
               alt="Afterly Logo" 
               className="h-32 md:h-40 lg:h-48 xl:h-56 w-auto mx-auto animate-float"
               whileHover={{ scale: 1.05, rotate: 2 }}
@@ -243,7 +247,7 @@ export default function App() {
           whileHover={{ scale: 1.02 }}
         >
           <motion.img
-            src="/digital-legacy-visual.jpg"
+            src={digitalVisual}
             alt="Digital Legacy Visualization - Secure Your Digital Future"
             className="w-full h-full object-cover"
             whileHover={{ scale: 1.05 }}
