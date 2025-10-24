@@ -18,9 +18,9 @@ import LegacyScoreQuiz from "./components/LegacyScoreQuiz";
 import SignupModal from "./components/SignupModal";
 import ErrorBoundary from "./components/ErrorBoundary";
 
-// Import static assets
-import afterlyLogo from "/afterly-logo.png?url";
-import digitalVisual from "/digital-legacy-visual.jpg?url";
+// Import static assets using Vite's recommended approach
+const afterlyLogo = new URL('/afterly-logo.png', import.meta.url).href;
+const digitalVisual = new URL('/digital-legacy-visual.jpg', import.meta.url).href;
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -60,6 +60,8 @@ export default function App() {
   // Debug image URLs
   console.log('Afterly Logo URL:', afterlyLogo);
   console.log('Digital Visual URL:', digitalVisual);
+  console.log('Import meta URL:', import.meta.url);
+  console.log('Base URL:', new URL('.', import.meta.url).href);
   
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 300], [0, -50]);
