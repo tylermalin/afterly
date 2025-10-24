@@ -126,11 +126,15 @@ export default function App() {
           {/* Logo */}
           <motion.div variants={scaleIn} className="mb-8">
             <motion.img 
-              src="/20250817_0626_Afterly Legacy Security_simple_compo (1).png" 
+              src="/afterly-logo.png" 
               alt="Afterly Logo" 
               className="h-32 md:h-40 lg:h-48 xl:h-56 w-auto mx-auto animate-float"
               whileHover={{ scale: 1.05, rotate: 2 }}
               transition={{ type: "spring", stiffness: 300 }}
+              onError={(e) => {
+                console.error('Logo failed to load:', e);
+                e.currentTarget.style.display = 'none';
+              }}
             />
           </motion.div>
           <motion.h1
@@ -239,11 +243,15 @@ export default function App() {
           whileHover={{ scale: 1.02 }}
         >
           <motion.img
-            src="/digital-portrait.jpg"
+            src="/digital-legacy-visual.jpg"
             alt="Digital Legacy Visualization - Secure Your Digital Future"
             className="w-full h-full object-cover"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.3 }}
+            onError={(e) => {
+              console.error('Digital legacy image failed to load:', e);
+              e.currentTarget.style.display = 'none';
+            }}
           />
         </motion.div>
       </motion.section>
