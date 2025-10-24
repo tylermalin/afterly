@@ -412,7 +412,8 @@ export default function App() {
       {/* LegacyScore Quiz Modal */}
       <LegacyScoreQuiz 
         isOpen={isQuizOpen} 
-        onClose={() => setIsQuizOpen(false)} 
+        onClose={() => setIsQuizOpen(false)}
+        onOpenSignup={() => setIsSignupOpen(true)}
       />
 
       {/* Signup Modal */}

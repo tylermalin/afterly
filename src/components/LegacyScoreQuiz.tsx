@@ -118,9 +118,10 @@ const questions: Question[] = [
 interface LegacyScoreQuizProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenSignup: () => void;
 }
 
-export default function LegacyScoreQuiz({ isOpen, onClose }: LegacyScoreQuizProps) {
+export default function LegacyScoreQuiz({ isOpen, onClose, onOpenSignup }: LegacyScoreQuizProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [showResults, setShowResults] = useState(false);
@@ -383,6 +384,10 @@ export default function LegacyScoreQuiz({ isOpen, onClose }: LegacyScoreQuizProp
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    onClose();
+                    onOpenSignup();
+                  }}
                   className="bg-teal-400 text-black px-8 py-3 rounded-xl font-semibold hover:bg-teal-300 transition-colors"
                 >
                   Start Your Legacy with Afterly
