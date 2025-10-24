@@ -18,9 +18,9 @@ import LegacyScoreQuiz from "./components/LegacyScoreQuiz";
 import SignupModal from "./components/SignupModal";
 import ErrorBoundary from "./components/ErrorBoundary";
 
-// Public assets - use direct paths since they're in public folder
-const afterlyLogo = '/afterly-logo.png';
-const digitalVisual = '/digital-legacy-visual.jpg';
+// Import assets from src/assets folder
+import afterlyLogo from './assets/afterly-logo.png';
+import digitalVisual from './assets/digital-legacy-visual.jpg';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -57,9 +57,6 @@ export default function App() {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [particles, setParticles] = useState<Array<{id: number, x: number, y: number, size: number, delay: number}>>([]);
   
-  // Debug image URLs
-  console.log('Afterly Logo URL:', afterlyLogo);
-  console.log('Digital Visual URL:', digitalVisual);
   
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 300], [0, -50]);
@@ -139,10 +136,6 @@ export default function App() {
               className="h-32 md:h-40 lg:h-48 xl:h-56 w-auto mx-auto animate-float"
               whileHover={{ scale: 1.05, rotate: 2 }}
               transition={{ type: "spring", stiffness: 300 }}
-              onError={(e) => {
-                console.error('Logo failed to load:', e);
-                e.currentTarget.style.display = 'none';
-              }}
             />
           </motion.div>
           <motion.h1
@@ -256,10 +249,6 @@ export default function App() {
             className="w-full h-full object-cover"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.3 }}
-            onError={(e) => {
-              console.error('Digital legacy image failed to load:', e);
-              e.currentTarget.style.display = 'none';
-            }}
           />
         </motion.div>
       </motion.section>
