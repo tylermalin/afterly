@@ -19,8 +19,8 @@ import SignupModal from "./components/SignupModal";
 import ErrorBoundary from "./components/ErrorBoundary";
 
 // Import static assets
-import afterlyLogo from "/afterly-logo.png";
-import digitalVisual from "/digital-legacy-visual.jpg";
+import afterlyLogo from "/afterly-logo.png?url";
+import digitalVisual from "/digital-legacy-visual.jpg?url";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -56,6 +56,10 @@ export default function App() {
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [particles, setParticles] = useState<Array<{id: number, x: number, y: number, size: number, delay: number}>>([]);
+  
+  // Debug image URLs
+  console.log('Afterly Logo URL:', afterlyLogo);
+  console.log('Digital Visual URL:', digitalVisual);
   
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 300], [0, -50]);
