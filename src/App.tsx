@@ -258,13 +258,13 @@ function Header({ onOpenSignup, onNavigate, currentPath }: {
   currentPath: string;
 }) {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-10 bg-[#04080f]/40 backdrop-blur-xl border-b border-white/5">
+    <header className="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-4 bg-[#04080f]/60 backdrop-blur-xl border-b border-white/5">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Left: Investor Info */}
         <div className="flex-1 hidden md:flex items-center">
           <button
             onClick={() => onNavigate(currentPath === "/investors" ? "/" : "/investors")}
-            className="text-[12px] font-bold text-teal-400 hover:text-teal-300 transition-colors uppercase tracking-[0.25em]"
+            className="text-[11px] font-bold text-teal-400 hover:text-teal-300 transition-colors uppercase tracking-[0.2em]"
           >
             {currentPath === "/investors" ? "← Back Home" : "Investor Info"}
           </button>
@@ -272,23 +272,23 @@ function Header({ onOpenSignup, onNavigate, currentPath }: {
 
         {/* Center: Logo */}
         <div className="flex-shrink-0 flex justify-center items-center">
-          <button onClick={() => onNavigate('/')} className="hover:opacity-90 transition-all group">
+          <button onClick={() => onNavigate('/')} className="hover:opacity-90 transition-all group px-4">
             <img
               src={afterlyLogo}
               alt="Afterly"
-              className="h-24 md:h-32 lg:h-40 w-auto drop-shadow-[0_0_40px_rgba(20,184,166,0.3)] group-hover:drop-shadow-[0_0_60px_rgba(20,184,166,0.5)] transition-all"
+              className="h-12 md:h-14 w-auto transition-transform duration-500 group-hover:scale-105"
             />
           </button>
         </div>
 
         {/* Right: Actions */}
-        <div className="flex-1 flex items-center justify-end gap-8">
-          <button className="hidden sm:block text-[12px] font-bold text-gray-400 hover:text-white transition-colors uppercase tracking-[0.25em]">
+        <div className="flex-1 flex items-center justify-end gap-6">
+          <button className="hidden sm:block text-[11px] font-bold text-gray-400 hover:text-white transition-colors uppercase tracking-[0.2em]">
             Log in
           </button>
           <button
             onClick={() => onOpenSignup('presale')}
-            className="px-8 py-4 bg-white text-black text-[12px] font-black rounded-xl hover:bg-teal-400 transition-all active:scale-95 uppercase tracking-[0.25em] shadow-xl shadow-white/5"
+            className="px-6 py-2.5 bg-white text-black text-[11px] font-black rounded-lg hover:bg-teal-400 transition-all active:scale-95 uppercase tracking-[0.2em]"
           >
             Get Started
           </button>
