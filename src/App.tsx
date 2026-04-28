@@ -6,6 +6,7 @@ import SignupModal from "./components/SignupModal";
 import ErrorBoundary from "./components/ErrorBoundary";
 
 import afterlyLogo from './assets/afterly-logo.png';
+import legacyViz from './assets/legacy-visualization.png';
 import {
   QuantumVaultIcon,
   MessagesFutureIcon,
@@ -443,12 +444,16 @@ export default function App() {
                     ))}
                   </ul>
                 </div>
-                <div className="rounded-2xl overflow-hidden border border-white/8 bg-gradient-to-br from-teal-950/40 to-indigo-950/40 aspect-[4/3] flex items-center justify-center relative">
-                  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(20,184,166,0.12),transparent_70%)]" />
-                  <div className="relative text-center p-8">
-                    <div className="text-6xl mb-4">🛡️</div>
-                    <p className="text-sm text-gray-400 font-light">Digital Legacy Visualization</p>
-                    <p className="text-xs text-teal-500/60 font-mono uppercase tracking-widest mt-1">Secure Your Digital Future</p>
+                <div className="rounded-2xl overflow-hidden border border-white/8 bg-black/40 aspect-[4/3] flex items-center justify-center relative group">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
+                  <img
+                    src={legacyViz}
+                    alt="Digital Legacy Visualization"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute bottom-6 left-6 z-20">
+                    <p className="text-[10px] text-teal-400 font-mono uppercase tracking-[0.2em] mb-1">Visualization</p>
+                    <p className="text-white text-sm font-medium tracking-tight">Secure Your Digital Future</p>
                   </div>
                 </div>
               </section>
