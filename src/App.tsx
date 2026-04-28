@@ -1,6 +1,21 @@
 import { motion, AnimatePresence, useAnimationFrame } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
-import { Zap, Sparkles } from "lucide-react";
+import {
+  Zap,
+  Sparkles,
+  ArrowRight,
+  Play,
+  Check,
+  ShieldCheck,
+  Lock,
+  Users,
+  Mail,
+  Cloud,
+  Coins,
+  MessageSquare,
+  FileText,
+  Key
+} from "lucide-react";
 import LegacyScoreQuiz from "./components/LegacyScoreQuiz";
 import SignupModal from "./components/SignupModal";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -237,26 +252,38 @@ function BubbleTicker() {
 
 
 // ─── Header ───────────────────────────────────────────────────────────────────
-function Header({ onOpenSignup }: { onOpenSignup: (type: string) => void }) {
+function Header({ onOpenSignup, onNavigate, currentPath }: {
+  onOpenSignup: (type: "presale" | "more") => void;
+  onNavigate: (path: string) => void;
+  currentPath: string;
+}) {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-5 bg-black/10 backdrop-blur-md border-b border-white/5">
+    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-5 bg-[#04080f]/80 backdrop-blur-xl border-b border-white/5">
       <div className="flex items-center gap-8">
-        <img src={afterlyLogo} alt="Afterly" className="h-8 w-auto" />
+        <button onClick={() => onNavigate('/')} className="hover:opacity-80 transition-opacity">
+          <img src={afterlyLogo} alt="Afterly" className="h-10 w-auto" />
+        </button>
         <nav className="hidden lg:flex items-center gap-6">
           {['Product', 'Security', 'Pricing', 'Resources', 'About'].map((item) => (
-            <button key={item} className="text-[13px] font-medium text-gray-400 hover:text-white transition-colors">
+            <button key={item} className="text-[12px] font-medium text-gray-400 hover:text-white transition-colors uppercase tracking-widest">
               {item}
             </button>
           ))}
+          <button
+            onClick={() => onNavigate(currentPath === "/investors" ? "/" : "/investors")}
+            className="text-[12px] font-medium text-teal-400 hover:text-teal-300 transition-colors uppercase tracking-widest"
+          >
+            {currentPath === "/investors" ? "← Home" : "Investors"}
+          </button>
         </nav>
       </div>
       <div className="flex items-center gap-4">
-        <button className="text-[13px] font-medium text-gray-400 hover:text-white transition-colors">
+        <button className="text-[12px] font-medium text-gray-400 hover:text-white transition-colors uppercase tracking-widest">
           Log in
         </button>
         <button
-          onClick={() => onOpenSignup('start')}
-          className="px-5 py-2.5 bg-white text-black text-[13px] font-bold rounded-lg hover:bg-gray-200 transition-colors"
+          onClick={() => onOpenSignup('presale')}
+          className="px-5 py-2.5 bg-white text-black text-[12px] font-bold rounded-lg hover:bg-gray-200 transition-all active:scale-95 uppercase tracking-widest"
         >
           Get Started
         </button>
@@ -295,26 +322,11 @@ export default function App() {
         {/* SVG animated background */}
         <AnimatedBackground />
 
-        {/* Navigation */}
-        <nav className="fixed top-0 left-0 right-0 z-40 px-8 md:px-14 py-6 flex justify-between items-center">
-          <motion.div
-            initial={{ opacity: 0, y: -16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="text-xs uppercase tracking-[0.25em] text-teal-500/70 font-mono"
-          >
-            afterly
-          </motion.div>
-          <motion.button
-            initial={{ opacity: 0, y: -16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            onClick={() => navigate(currentPath === "/investors" ? "/" : "/investors")}
-            className="text-xs uppercase tracking-[0.2em] text-gray-500 hover:text-teal-400 transition-colors duration-500 font-mono"
-          >
-            {currentPath === "/investors" ? "← back" : "Investor Deck"}
-          </motion.button>
-        </nav>
+        <Header
+          onOpenSignup={handleOpenSignup}
+          onNavigate={navigate}
+          currentPath={currentPath}
+        />
 
         {/* Pages */}
         <AnimatePresence mode="wait">
@@ -349,8 +361,6 @@ export default function App() {
             </motion.section>
           ) : (
             <>
-              <Header onOpenSignup={handleOpenSignup} />
-
               <motion.section
                 key="home"
                 initial={{ opacity: 0 }}
@@ -440,15 +450,12 @@ export default function App() {
                   </p>
                 </motion.div>
 
-                {/* ── Bubble Ticker — floating background elements ── */}
                 <div className="absolute inset-0 pointer-events-none opacity-40">
                   <BubbleTicker />
                 </div>
               </motion.section>
 
-              {/* ════════════════════════════════════════
-                  FEATURES GRID
-              ════════════════════════════════════════ */}
+              {/* FEATURES GRID */}
               <section className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-10 py-32 border-t border-white/5">
                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
                   {[
