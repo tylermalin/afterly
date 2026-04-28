@@ -22,6 +22,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 
 import afterlyLogo from './assets/afterly-logo.png';
 import legacyViz from './assets/legacy-visualization.png';
+import investorDeck from './assets/afterly.pdf';
 import {
   QuantumVaultIcon,
   MessagesFutureIcon,
@@ -353,7 +354,7 @@ export default function App() {
               </p>
               <div className="w-full rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_80px_rgba(20,184,166,0.08)] bg-black/30 backdrop-blur-xl" style={{ height: "75vh" }}>
                 <iframe
-                  src="/afterly.pdf#toolbar=0&navpanes=0"
+                  src={`${investorDeck}#toolbar=0&navpanes=0`}
                   className="w-full h-full border-none"
                   title="Afterly Investor Deck"
                 />
