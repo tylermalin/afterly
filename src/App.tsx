@@ -258,35 +258,41 @@ function Header({ onOpenSignup, onNavigate, currentPath }: {
   currentPath: string;
 }) {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-5 bg-[#04080f]/80 backdrop-blur-xl border-b border-white/5">
-      <div className="flex items-center gap-8">
-        <button onClick={() => onNavigate('/')} className="hover:opacity-80 transition-opacity">
-          <img src={afterlyLogo} alt="Afterly" className="h-10 w-auto" />
-        </button>
-        <nav className="hidden lg:flex items-center gap-6">
-          {['Product', 'Security', 'Pricing', 'Resources', 'About'].map((item) => (
-            <button key={item} className="text-[12px] font-medium text-gray-400 hover:text-white transition-colors uppercase tracking-widest">
-              {item}
-            </button>
-          ))}
+    <header className="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-6 bg-[#04080f]/40 backdrop-blur-xl border-b border-white/5">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
+        {/* Left: Investor Info */}
+        <div className="flex-1 hidden md:flex items-center">
           <button
             onClick={() => onNavigate(currentPath === "/investors" ? "/" : "/investors")}
-            className="text-[12px] font-medium text-teal-400 hover:text-teal-300 transition-colors uppercase tracking-widest"
+            className="text-[11px] font-bold text-teal-400 hover:text-teal-300 transition-colors uppercase tracking-[0.2em]"
           >
-            {currentPath === "/investors" ? "← Home" : "Investors"}
+            {currentPath === "/investors" ? "← Back Home" : "Investor Info"}
           </button>
-        </nav>
-      </div>
-      <div className="flex items-center gap-4">
-        <button className="text-[12px] font-medium text-gray-400 hover:text-white transition-colors uppercase tracking-widest">
-          Log in
-        </button>
-        <button
-          onClick={() => onOpenSignup('presale')}
-          className="px-5 py-2.5 bg-white text-black text-[12px] font-bold rounded-lg hover:bg-gray-200 transition-all active:scale-95 uppercase tracking-widest"
-        >
-          Get Started
-        </button>
+        </div>
+
+        {/* Center: Logo */}
+        <div className="flex-shrink-0 flex justify-center items-center">
+          <button onClick={() => onNavigate('/')} className="hover:opacity-90 transition-all group">
+            <img
+              src={afterlyLogo}
+              alt="Afterly"
+              className="h-14 md:h-18 w-auto drop-shadow-[0_0_20px_rgba(20,184,166,0.2)] group-hover:drop-shadow-[0_0_30px_rgba(20,184,166,0.4)] transition-all"
+            />
+          </button>
+        </div>
+
+        {/* Right: Actions */}
+        <div className="flex-1 flex items-center justify-end gap-6">
+          <button className="hidden sm:block text-[11px] font-bold text-gray-400 hover:text-white transition-colors uppercase tracking-[0.2em]">
+            Log in
+          </button>
+          <button
+            onClick={() => onOpenSignup('presale')}
+            className="px-6 py-3 bg-white text-black text-[11px] font-black rounded-xl hover:bg-teal-400 transition-all active:scale-95 uppercase tracking-[0.2em] shadow-lg shadow-white/5"
+          >
+            Get Started
+          </button>
+        </div>
       </div>
     </header>
   );
