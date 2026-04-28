@@ -177,40 +177,40 @@ function BubbleTicker() {
     const spawn = () => {
       const id = counter.current++;
       const idx = Math.floor(Math.random() * BUBBLES.length);
-      const x = 8 + Math.random() * 64; // 8–72% from left
+      const x = 5 + Math.random() * 90; // Wider horizontal spread
       setActive(prev => [...prev, { id, idx, x }]);
-      setTimeout(() => setActive(prev => prev.filter(b => b.id !== id)), 3200);
+      setTimeout(() => setActive(prev => prev.filter(b => b.id !== id)), 8200);
     };
 
     spawn();
-    // stagger spawns: new bubble every 1.8–2.6 s
+    // stagger spawns: new bubble every 2.5–4 s for slower pace
     let t: ReturnType<typeof setTimeout>;
     const schedule = () => {
-      t = setTimeout(() => { spawn(); schedule(); }, 1800 + Math.random() * 800);
+      t = setTimeout(() => { spawn(); schedule(); }, 2500 + Math.random() * 1500);
     };
     schedule();
     return () => clearTimeout(t);
   }, []);
 
   return (
-    <div className="relative w-full h-28 overflow-hidden pointer-events-none select-none" aria-hidden>
+    <div className="relative w-full h-40 overflow-hidden pointer-events-none select-none" aria-hidden>
       {active.map(({ id, idx, x }) => {
         const b = BUBBLES[idx];
         const isAmber = b.accent === "amber";
         return (
           <motion.div
             key={id}
-            initial={{ opacity: 0, y: 80 }}
-            animate={{ opacity: [0, 0.95, 0.9, 0], y: -16 }}
-            transition={{ duration: 3, ease: "easeOut", times: [0, 0.18, 0.72, 1] }}
+            initial={{ opacity: 0, y: 140 }}
+            animate={{ opacity: [0, 0.95, 0.95, 0], y: -180 }}
+            transition={{ duration: 8, ease: "easeOut", times: [0, 0.15, 0.85, 1] }}
             style={{ left: `${x}%`, position: "absolute", bottom: 0, x: "-50%" }}
           >
             <div className={`
-              px-3.5 py-2.5 rounded-2xl whitespace-nowrap
-              border backdrop-blur-md
+              px-4 py-3 rounded-2xl whitespace-nowrap
+              border backdrop-blur-md shadow-lg
               ${isAmber
-                ? "border-amber-400/20 bg-amber-400/[0.05]"
-                : "border-rose-400/20 bg-rose-400/[0.05]"}
+                ? "border-amber-400/20 bg-amber-400/[0.03]"
+                : "border-rose-400/20 bg-rose-400/[0.03]"}
             `}>
               {/* Stat / label */}
               <div className={`
