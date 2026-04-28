@@ -118,7 +118,7 @@ const questions: Question[] = [
 interface LegacyScoreQuizProps {
   isOpen: boolean;
   onClose: () => void;
-  onOpenSignup: () => void;
+  onOpenSignup: (type: "presale" | "more") => void;
 }
 
 export default function LegacyScoreQuiz({ isOpen, onClose, onOpenSignup }: LegacyScoreQuizProps) {
@@ -386,7 +386,7 @@ export default function LegacyScoreQuiz({ isOpen, onClose, onOpenSignup }: Legac
                   whileTap={{ scale: 0.98 }}
                   onClick={() => {
                     onClose();
-                    onOpenSignup();
+                    onOpenSignup("presale");
                   }}
                   className="bg-teal-400 text-black px-8 py-3 rounded-xl font-semibold hover:bg-teal-300 transition-colors"
                 >

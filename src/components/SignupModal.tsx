@@ -5,9 +5,10 @@ import { X, Mail, CheckCircle, Users } from 'lucide-react';
 interface SignupModalProps {
   isOpen: boolean;
   onClose: () => void;
+  type?: "presale" | "more";
 }
 
-export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
+export default function SignupModal({ isOpen, onClose, type = "presale" }: SignupModalProps) {
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [waitlistNumber, setWaitlistNumber] = useState(0);
@@ -157,7 +158,7 @@ export default function SignupModal({ isOpen, onClose }: SignupModalProps) {
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-semibold text-white">Join the Waitlist</h2>
+            <h2 className="text-2xl font-semibold text-white">{type === "more" ? "Request Access" : "Join the Waitlist"}</h2>
             <button
               onClick={handleClose}
               className="text-gray-400 hover:text-white transition-colors"
