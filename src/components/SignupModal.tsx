@@ -21,9 +21,10 @@ export default function SignupModal({ isOpen, onClose, type = "presale" }: Signu
     setIsLoading(true);
     
     try {
-      // Get or create waitlist counter
+      // Get or create waitlist counter starting at 1204
       const currentCount = localStorage.getItem('afterly-waitlist-count');
-      const newCount = currentCount ? parseInt(currentCount) + 1 : 1;
+      const startBase = 1204;
+      const newCount = currentCount ? parseInt(currentCount) + 1 : startBase;
       localStorage.setItem('afterly-waitlist-count', newCount.toString());
       
       // Collect user data
@@ -47,7 +48,8 @@ export default function SignupModal({ isOpen, onClose, type = "presale" }: Signu
       console.error('Error submitting email:', error);
       // Still show success to user even if backend fails
       const currentCount = localStorage.getItem('afterly-waitlist-count');
-      const newCount = currentCount ? parseInt(currentCount) + 1 : 1;
+      const startBase = 1204;
+      const newCount = currentCount ? parseInt(currentCount) + 1 : startBase;
       localStorage.setItem('afterly-waitlist-count', newCount.toString());
       setWaitlistNumber(newCount);
       setIsSubmitted(true);
@@ -233,7 +235,7 @@ export default function SignupModal({ isOpen, onClose, type = "presale" }: Signu
               </div>
               
               <h3 className="text-2xl font-semibold text-white mb-2">
-                You're on the list!
+                You're #{waitlistNumber} on the waitlist!
               </h3>
               
               <p className="text-gray-400 mb-6">
