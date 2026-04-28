@@ -178,40 +178,40 @@ function BubbleTicker() {
     const spawn = () => {
       const id = counter.current++;
       const idx = Math.floor(Math.random() * BUBBLES.length);
-      const x = 5 + Math.random() * 90; // Wider horizontal spread
+      // Concentrated around the central axis (40% to 60% range)
+      const x = 40 + Math.random() * 20; 
       setActive(prev => [...prev, { id, idx, x }]);
-      setTimeout(() => setActive(prev => prev.filter(b => b.id !== id)), 8200);
+      setTimeout(() => setActive(prev => prev.filter(b => b.id !== id)), 10200);
     };
 
     spawn();
-    // stagger spawns: new bubble every 2.5–4 s for slower pace
     let t: ReturnType<typeof setTimeout>;
     const schedule = () => {
-      t = setTimeout(() => { spawn(); schedule(); }, 2500 + Math.random() * 1500);
+      t = setTimeout(() => { spawn(); schedule(); }, 3000 + Math.random() * 2000);
     };
     schedule();
     return () => clearTimeout(t);
   }, []);
 
   return (
-    <div className="relative w-full h-40 overflow-hidden pointer-events-none select-none" aria-hidden>
+    <div className="relative w-full h-[500px] overflow-hidden pointer-events-none select-none" aria-hidden>
       {active.map(({ id, idx, x }) => {
         const b = BUBBLES[idx];
         const isAmber = b.accent === "amber";
         return (
           <motion.div
             key={id}
-            initial={{ opacity: 0, y: 140 }}
-            animate={{ opacity: [0, 0.95, 0.95, 0], y: -180 }}
-            transition={{ duration: 8, ease: "easeOut", times: [0, 0.15, 0.85, 1] }}
+            initial={{ opacity: 0, y: 400, scale: 0.8 }}
+            animate={{ opacity: [0, 0.8, 0.4, 0], y: -100, scale: 1 }}
+            transition={{ duration: 10, ease: "linear", times: [0, 0.2, 0.6, 1] }}
             style={{ left: `${x}%`, position: "absolute", bottom: 0, x: "-50%" }}
           >
             <div className={`
-              px-4 py-3 rounded-2xl whitespace-nowrap
-              border backdrop-blur-md shadow-lg
+              px-5 py-3.5 rounded-2xl whitespace-nowrap
+              border backdrop-blur-xl shadow-2xl
               ${isAmber
-                ? "border-amber-400/20 bg-amber-400/[0.03]"
-                : "border-rose-400/20 bg-rose-400/[0.03]"}
+                ? "border-amber-400/20 bg-amber-400/[0.02]"
+                : "border-rose-400/20 bg-rose-400/[0.02]"}
             `}>
               {/* Stat / label */}
               <div className={`
@@ -235,6 +235,35 @@ function BubbleTicker() {
   );
 }
 
+
+// ─── Header ───────────────────────────────────────────────────────────────────
+function Header({ onOpenSignup }: { onOpenSignup: (type: string) => void }) {
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-5 bg-black/10 backdrop-blur-md border-b border-white/5">
+      <div className="flex items-center gap-8">
+        <img src={afterlyLogo} alt="Afterly" className="h-8 w-auto" />
+        <nav className="hidden lg:flex items-center gap-6">
+          {['Product', 'Security', 'Pricing', 'Resources', 'About'].map((item) => (
+            <button key={item} className="text-[13px] font-medium text-gray-400 hover:text-white transition-colors">
+              {item}
+            </button>
+          ))}
+        </nav>
+      </div>
+      <div className="flex items-center gap-4">
+        <button className="text-[13px] font-medium text-gray-400 hover:text-white transition-colors">
+          Log in
+        </button>
+        <button
+          onClick={() => onOpenSignup('start')}
+          className="px-5 py-2.5 bg-white text-black text-[13px] font-bold rounded-lg hover:bg-gray-200 transition-colors"
+        >
+          Get Started
+        </button>
+      </div>
+    </header>
+  );
+}
 
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function App() {
@@ -320,6 +349,7 @@ export default function App() {
             </motion.section>
           ) : (
             <>
+              <Header onOpenSignup={handleOpenSignup} />
 
               <motion.section
                 key="home"
@@ -327,47 +357,32 @@ export default function App() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.8 }}
-                className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 pt-20 pb-10 text-center overflow-hidden"
+                className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 pt-32 pb-16 text-center overflow-hidden"
               >
-                {/* ── Logo ── */}
+                {/* ── Badge ── */}
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-                  className="relative mb-4"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.1 }}
+                  className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 mb-8"
                 >
-                  <div className="absolute inset-0 rounded-full bg-teal-500/10 blur-[50px] scale-[1.6] pointer-events-none" />
-                  <motion.img
-                    src={afterlyLogo}
-                    alt="Afterly"
-                    className="relative w-[min(58vw,300px)] md:w-[260px] lg:w-[300px] h-auto mx-auto drop-shadow-[0_0_40px_rgba(20,184,166,0.3)]"
-                    animate={{ y: [0, -8, 0] }}
-                    transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-                  />
-                </motion.div>
-
-                {/* ── Bubble Ticker — fills the gap between logo and headline ── */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                  className="w-full mb-5 mt-3"
-                >
-                  <BubbleTicker />
+                  <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
+                  <span className="text-[10px] font-mono font-bold tracking-[0.15em] text-teal-400 uppercase">
+                    Military-Grade. Post-Quantum Secure.
+                  </span>
                 </motion.div>
 
                 {/* ── Headline ── */}
                 <motion.h1
                   initial={{ opacity: 0, y: 18 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 1.2, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-[10vw] sm:text-[3.8rem] md:text-[4.5rem] lg:text-[5rem] leading-[0.9] font-medium tracking-tighter mb-4 text-white"
+                  transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                  className="text-[12vw] sm:text-[4.5rem] md:text-[5.5rem] lg:text-[6.5rem] leading-[0.95] font-medium tracking-tighter mb-6 text-white"
                 >
-                  Your{" "}
-                  <span className="font-serif italic font-light text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-emerald-500">
-                    Legacy.
+                  Your Legacy.<br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-emerald-500">
+                    Protected.
                   </span>
-                  <br />Secured.
                 </motion.h1>
 
                 {/* ── Tagline ── */}
@@ -375,9 +390,9 @@ export default function App() {
                   initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-sm md:text-base text-gray-400 font-light max-w-sm mx-auto mb-8 leading-relaxed tracking-wide"
+                  className="text-base md:text-lg text-gray-400 font-light max-w-xl mx-auto mb-10 leading-relaxed tracking-wide"
                 >
-                  The quantum-resistant digital legacy operating system.
+                  Afterly protects your life's digital footprint — from crypto keys and cloud accounts to messages for loved ones — all secured by military-grade, quantum-resistant encryption.
                 </motion.p>
 
                 {/* ── CTA ── */}
@@ -385,75 +400,184 @@ export default function App() {
                   initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.9, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                  className="flex flex-col items-center gap-4"
+                  className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
                 >
                   <button
                     id="get-score-cta"
                     onClick={() => setIsQuizOpen(true)}
-                    className="group relative inline-flex items-center justify-center gap-2 px-9 py-3.5 rounded-full bg-white text-black overflow-hidden transition-transform duration-500 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
+                    className="group relative inline-flex items-center justify-center gap-3 px-10 py-4 rounded-xl bg-white text-black transition-transform duration-500 hover:scale-105 active:scale-95 focus:outline-none"
                   >
-                    <span className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none" />
-                    <Zap className="w-3.5 h-3.5 relative z-10" />
-                    <span className="relative z-10 text-xs uppercase tracking-[0.18em] font-bold">
-                      Get Your Score
+                    <span className="relative z-10 text-[14px] font-bold tracking-tight">
+                      Secure Your Digital Future
                     </span>
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                   </button>
-
-                  <span className="text-[10px] uppercase tracking-[0.22em] text-gray-600 font-mono">
-                    60 seconds · free
-                  </span>
 
                   <button
-                    onClick={() => handleOpenSignup("more")}
-                    className="text-[11px] text-gray-500 hover:text-teal-400 underline underline-offset-4 decoration-gray-700 hover:decoration-teal-400/50 transition-all duration-500 font-mono uppercase tracking-widest"
+                    className="flex items-center gap-3 px-10 py-4 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-colors"
                   >
-                    Find Out More
+                    <span className="text-[14px] font-medium">See How It Works</span>
+                    <Play className="w-3 h-3 fill-current" />
                   </button>
                 </motion.div>
+
+                {/* ── Social Proof ── */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 1, delay: 0.8 }}
+                  className="flex flex-col items-center gap-3"
+                >
+                  <div className="flex -space-x-3">
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="w-10 h-10 rounded-full border-2 border-black bg-gray-800 overflow-hidden">
+                        <img src={`https://i.pravatar.cc/100?u=${i + 15}`} alt="User" />
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-[12px] text-gray-500 font-light">
+                    Trusted by thousands preparing for <span className="text-gray-300 font-normal">today and tomorrow.</span>
+                  </p>
+                </motion.div>
+
+                {/* ── Bubble Ticker — floating background elements ── */}
+                <div className="absolute inset-0 pointer-events-none opacity-40">
+                  <BubbleTicker />
+                </div>
               </motion.section>
 
               {/* ════════════════════════════════════════
-                  FEATURES — Everything organized.
+                  FEATURES GRID
               ════════════════════════════════════════ */}
-              <section className="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-10 py-24 md:py-32 grid md:grid-cols-2 gap-16 items-center border-t border-white/5">
-                <div>
-                  <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-teal-500 mb-4">Features</p>
-                  <h2 className="text-3xl md:text-4xl font-medium tracking-tight mb-5 text-white leading-tight">
-                    Everything organized.<br />
-                    <span className="font-serif italic font-light text-gray-400">Nothing overlooked.</span>
-                  </h2>
-                  <p className="text-gray-400 text-sm leading-relaxed mb-8 max-w-sm">
-                    Afterly protects your life's digital footprint — from crypto keys and cloud accounts to messages for loved ones — all secured by military-grade, quantum-resistant encryption.
-                  </p>
-                  <ul className="space-y-4">
-                    {[
-                      { icon: <QuantumVaultIcon    size={28} />, title: "Quantum Vault",         desc: "Military-grade, post-quantum protection for your digital assets." },
-                      { icon: <MessagesFutureIcon  size={28} />, title: "Messages for the Future", desc: "Time-locked capsules that keep your voice alive when it matters most." },
-                      { icon: <CrisisBinderIcon    size={28} />, title: "Crisis-Proof Binder",    desc: "Emergency-ready access to vital documents and data." },
-                      { icon: <DigitalWillIcon     size={28} />, title: "Digital Asset Will",     desc: "Legally backed coverage for your digital holdings across platforms." },
-                      { icon: <LegacyScoreIcon     size={28} />, title: "LegacyScore™",           desc: "A 30-second snapshot of your digital preparedness." },
-                    ].map(({ icon, title, desc }) => (
-                      <li key={title} className="flex items-start gap-3 group">
-                        <span className="text-teal-400 mt-0.5 flex-shrink-0">{icon}</span>
-                        <span className="text-sm text-gray-300 leading-relaxed">
-                          <strong className="text-white font-medium">{title}</strong>
-                          <span className="text-gray-500"> — </span>
-                          {desc}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+              <section className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-10 py-32 border-t border-white/5">
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                  {[
+                    {
+                      icon: <QuantumVaultIcon size={32} />,
+                      title: "Quantum Vault",
+                      desc: "Military-grade, post-quantum encryption keeps your digital assets untouchable.",
+                      bullets: ["Crypto Keys & Wallets", "Cloud Accounts", "Passwords & 2FA", "Secure Notes"]
+                    },
+                    {
+                      icon: <MessagesFutureIcon size={32} />,
+                      title: "Messages for the Future",
+                      desc: "Time-locked capsules that keep your voice alive when it matters most.",
+                      bullets: ["Video & Audio Messages", "Letters & Notes", "Choose Recipients", "Set Unlock Time"]
+                    },
+                    {
+                      icon: <CrisisBinderIcon size={32} />,
+                      title: "Crisis-Proof Binder",
+                      desc: "Emergency-ready access to vital documents and data when loved ones need it.",
+                      bullets: ["IDs & Documents", "Medical Info", "Financial Records", "Emergency Plans"]
+                    },
+                    {
+                      icon: <DigitalWillIcon size={32} />,
+                      title: "Digital Asset Will",
+                      desc: "Legally backed coverage for your digital holdings across all platforms.",
+                      bullets: ["Social Media", "Domain Names", "Digital Assets", "Legal Validity"]
+                    },
+                    {
+                      icon: <LegacyScoreIcon size={32} />,
+                      title: "LegacyScore™",
+                      desc: "A 30-second snapshot of your digital preparedness and readiness.",
+                      bullets: ["Security Strength", "Account Coverage", "Recovery Ready", "Action Plan"]
+                    }
+                  ].map((card) => (
+                    <div key={card.title} className="p-8 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] hover:border-white/10 transition-all duration-500 group">
+                      <div className="text-teal-400 mb-6 group-hover:scale-110 transition-transform duration-500">
+                        {card.icon}
+                      </div>
+                      <h3 className="text-lg font-medium text-white mb-3 tracking-tight">{card.title}</h3>
+                      <p className="text-sm text-gray-500 leading-relaxed mb-6">
+                        {card.desc}
+                      </p>
+                      <ul className="space-y-2.5">
+                        {card.bullets.map((bullet) => (
+                          <li key={bullet} className="flex items-center gap-2 text-[12px] text-gray-400">
+                            <Check className="w-3 h-3 text-teal-500/60" />
+                            <span>{bullet}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
                 </div>
-                <div className="rounded-2xl overflow-hidden border border-white/8 bg-black/40 aspect-[4/3] flex items-center justify-center relative group">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
-                  <img
-                    src={legacyViz}
-                    alt="Digital Legacy Visualization"
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute bottom-6 left-6 z-20">
-                    <p className="text-[10px] text-teal-400 font-mono uppercase tracking-[0.2em] mb-1">Visualization</p>
-                    <p className="text-white text-sm font-medium tracking-tight">Secure Your Digital Future</p>
+              </section>
+
+              {/* ════════════════════════════════════════
+                  VISUALIZATION SECTION
+              ════════════════════════════════════════ */}
+              <section className="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-10 py-32 grid lg:grid-cols-2 gap-16 items-center border-t border-white/5">
+                <div>
+                  <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-teal-500 mb-4">Visualization</p>
+                  <h2 className="text-4xl md:text-5xl font-medium tracking-tight mb-6 text-white leading-tight">
+                    Secure Your<br />
+                    <span className="font-serif italic font-light text-gray-400">Digital Future.</span>
+                  </h2>
+                  <div className="space-y-8 mt-12">
+                    {[
+                      { icon: <ShieldCheck className="w-5 h-5" />, title: "Military-Grade Security", text: "Post-quantum encryption protects against today's and tomorrow's threats." },
+                      { icon: <Lock className="w-5 h-5" />, title: "You're Always in Control", text: "You decide what to store, who to share with, and when they can access it." },
+                      { icon: <Users className="w-5 h-5" />, title: "Peace of Mind for You", text: "When life happens, they won't have to navigate the digital world alone." },
+                    ].map((item) => (
+                      <div key={item.title} className="flex gap-4">
+                        <div className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/5 flex items-center justify-center text-teal-400 flex-shrink-0">
+                          {item.icon}
+                        </div>
+                        <div>
+                          <h4 className="text-white font-medium text-base mb-1">{item.title}</h4>
+                          <p className="text-sm text-gray-500 leading-relaxed">{item.text}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="relative aspect-square rounded-3xl bg-white/[0.01] border border-white/5 flex items-center justify-center p-8 overflow-hidden group">
+                  {/* Subtle pulsing glow */}
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(20,184,166,0.05),transparent_70%)] animate-pulse" />
+
+                  {/* Central Hub */}
+                  <div className="relative z-20 w-32 h-32 rounded-full bg-black border-4 border-white/10 flex items-center justify-center shadow-[0_0_60px_rgba(20,184,166,0.15)] group-hover:scale-105 transition-transform duration-700">
+                    <div className="absolute inset-0 rounded-full border border-teal-500/20 animate-ping opacity-20" />
+                    <img src={afterlyLogo} alt="Afterly" className="w-16 opacity-80" />
+                  </div>
+
+                  {/* Nodes — Circular Layout */}
+                  <div className="absolute inset-0">
+                    {[
+                      { label: "Email", icon: <Mail size={16} />, angle: 0 },
+                      { label: "Cloud", icon: <Cloud size={16} />, angle: 45 },
+                      { label: "Crypto", icon: <Coins size={16} />, angle: 90 },
+                      { label: "Messages", icon: <MessageSquare size={16} />, angle: 135 },
+                      { label: "Vault", icon: <Lock size={16} />, angle: 180 },
+                      { label: "Legacy", icon: <Users size={16} />, angle: 225 },
+                      { label: "Documents", icon: <FileText size={16} />, angle: 270 },
+                      { label: "Passwords", icon: <Key size={16} />, angle: 315 },
+                    ].map((node, i) => {
+                      const rad = (node.angle * Math.PI) / 180;
+                      const dist = 42; // percentage from center
+                      const x = 50 + Math.cos(rad) * dist;
+                      const y = 50 + Math.sin(rad) * dist;
+
+                      return (
+                        <div
+                          key={i}
+                          className="absolute w-14 h-14 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1.5"
+                          style={{ left: `${x}%`, top: `${y}%` }}
+                        >
+                          <div className="w-12 h-12 rounded-2xl bg-black border border-white/10 flex items-center justify-center text-gray-400 group-hover:text-teal-400 group-hover:border-teal-500/30 transition-all duration-500 shadow-xl">
+                            {node.icon}
+                          </div>
+                          <span className="text-[9px] uppercase tracking-widest text-gray-500 font-mono">{node.label}</span>
+                          {/* Connection Line */}
+                          <div
+                            className="absolute top-1/2 left-1/2 w-32 h-[1px] bg-gradient-to-r from-teal-500/20 to-transparent origin-left -z-10"
+                            style={{ transform: `rotate(${node.angle + 180}deg)` }}
+                          />
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </section>
